@@ -1,7 +1,12 @@
+import com.sdajava.hibernate.entity.BooksEntity;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+
+import java.awt.print.Book;
+import java.util.List;
 
 public class Main {
     private static final SessionFactory ourSessionFactory;
@@ -21,6 +26,50 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        getSession();
+        listOfBooks();
+        addBook();
+
+        ourSessionFactory.close();
+    }
+
+    private static void listOfBooks() {
+        Transaction tx = null;
+
+        try (Session session = ourSessionFactory.openSession()) {
+            tx = session.beginTransaction();
+            List<BooksEntity> books =
+                    session.createQuery("FROM " + BooksEntity.class.getName()).list();
+
+            for (BooksEntity book : books) {
+                System.out.println(book);
+            }
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+
+    private static void addBook() {
+        Transaction tx = null;
+
+        try (Session session = ourSessionFactory.openSession()) {
+            tx = session.beginTransaction();
+
+            BooksEntity booksEntity = new BooksEntity();
+            booksEntity.setAuthor("Test2");
+            booksEntity.setIsbn("666");
+
+            session.save(booksEntity);
+
+            tx.commit();
+
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 }
