@@ -28,6 +28,7 @@ public class Main {
     public static void main(String[] args) {
         listOfBooks();
         addBook();
+        deleteBook();
 
         ourSessionFactory.close();
     }
@@ -62,6 +63,25 @@ public class Main {
             booksEntity.setIsbn("666");
 
             session.save(booksEntity);
+
+            tx.commit();
+
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+
+    private static void deleteBook() {
+        Transaction tx = null;
+
+        try (Session session = ourSessionFactory.openSession()) {
+            tx = session.beginTransaction();
+
+            BooksEntity bookToDelete = (BooksEntity) session.load(BooksEntity.class, 2);
+            session.delete(bookToDelete);
 
             tx.commit();
 
