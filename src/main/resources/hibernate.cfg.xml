@@ -11,7 +11,7 @@
         <property name="hibernate.connection.username">root</property>
         <property name="hibernate.connection.useSSL">false</property>
         <property name="hibernate.connection.password">12345</property>
-        <property name="hibernate.hbm2ddl.auto">update</property>
+        <property name="hibernate.hbm2ddl.auto">create</property>
 
         <mapping class="com.sdajava.hibernate.entity.BooksEntity"/>
     </session-factory>
