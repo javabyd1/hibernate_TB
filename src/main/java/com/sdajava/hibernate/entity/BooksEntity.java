@@ -22,7 +22,7 @@ import java.sql.Date;
 @Table(name = "books")
 public class BooksEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private int id;
     @Column
@@ -35,7 +35,7 @@ public class BooksEntity {
     private String isbn;
     @Column
     private String category;
-    @Column
+    @Column(name = "page_count")
     private Integer pageCount;
     @Column
     private String publisher;
